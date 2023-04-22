@@ -82,7 +82,11 @@ void Game::Init(bool m_bForceTexture)
 			;
 	}
 	
-
+	for (int i=0;i<5;i++)
+	{
+		m_vPoolMainPlayer.push_back(new Sprite(m_spMainPlayer));
+		m_vPoolSecondaryPlayer.push_back(new Sprite(m_spSecPlayer));
+	}
 	ChangeState(MainMenu);
 }
 

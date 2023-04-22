@@ -17,6 +17,14 @@ void Game::ChangeState(Menu a_NewMenuState)
 {
 	m_vDrawableTextList.clear();
 	m_vDrawableList.clear();
+	for (auto value: m_vMainPlayer)
+	{
+		m_vPoolMainPlayer.push_back(value);
+	}
+	for (auto value : m_vSecondaryPlayer)
+	{
+		m_vPoolSecondaryPlayer.push_back(value);
+	}
 	switch (a_NewMenuState)
 	{
 	case MainMenu:
@@ -50,10 +58,16 @@ void Game::ChangeTurn()
 	}
 	if (m_iTurn == GameMove::X)
 	{
+		m_vMainPlayer.push_back(m_vPoolMainPlayer.back());
+		m_vDrawableList.push_back(m_vPoolMainPlayer.back());
+		m_vPoolMainPlayer.pop_back();
 		m_iTurn = GameMove::O;
 	}
 	else if (m_iTurn == GameMove::O)
 	{
+		m_vSecondaryPlayer.push_back(m_vPoolSecondaryPlayer.back());
+		m_vDrawableList.push_back(m_vPoolSecondaryPlayer.back());
+		m_vPoolSecondaryPlayer.pop_back();
 		m_iTurn = GameMove::X;
 	}
 }
@@ -140,10 +154,19 @@ void Game::Update(RenderWindow& window)
 					if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
 						m_boardArray[i] == GameMove::None)
 					{
-						m_spMainPlayer.setPosition(
-							m_BoardSquare[i].getGlobalBounds().left,
-							m_BoardSquare[i].getGlobalBounds().top);
 						m_boardArray[i] = m_iTurn;
+						if (m_iTurn == GameMove::X)
+						{
+							m_vPoolMainPlayer.back()->setPosition
+							(m_BoardSquare[i].getGlobalBounds().left,
+								m_BoardSquare[i].getGlobalBounds().top);
+						}
+						else if (m_iTurn == GameMove::O)
+						{
+							m_vPoolSecondaryPlayer.back()->setPosition
+							    (m_BoardSquare[i].getGlobalBounds().left,
+								m_BoardSquare[i].getGlobalBounds().top);
+						}
 						ChangeTurn();
 						break;
 					}
@@ -152,7 +175,7 @@ void Game::Update(RenderWindow& window)
 
 
 		}
-		else
+		else 
 		{
 
 		}

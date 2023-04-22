@@ -59,8 +59,11 @@ private:
 	sf::Sprite m_spSecPlayer;
 	sf::Sprite m_spBoard;
 
-	vector<Sprite> m_vMainPlayer;
-	vector<Sprite> m_vSecondaryPlayer;
+	vector<Sprite*> m_vMainPlayer;
+	vector<Sprite*> m_vSecondaryPlayer;
+
+	vector<Sprite*> m_vPoolMainPlayer;
+	vector<Sprite*> m_vPoolSecondaryPlayer;
 
 	Font m_font;
 	Text m_uiStateText;
