@@ -219,14 +219,30 @@ void Game::Update(RenderWindow& window)
 								m_BoardSquare[i].getGlobalBounds().top);
 							m_iTurnCount++;
 						}
-						ChangeTurn();
-						
+						auto Result = CheckWinner();
+						if (Result != GameMove::None)
+						{
+							m_uiTurnText.setString("Turn Completed So Far !"+m_iTurnCount);
+							m_uiTurnText.setFillColor(Color::White);
+							auto temp_WinnerMsg = "Game Over ! Winner is X";
+							if (Result == GameMove::O)
+							{
+								auto temp_WinnerMsg = "Game Over ! Winner is O";
+							}
+							m_uiGameStatus.setString(temp_WinnerMsg);
+							ChangeGameState(GameState::Win);
+						}
+						else
+						{
+							ChangeTurn();
+						}
 						break;
 					}
 					else if (m_iTurnCount >9)
 					{
 						m_uiTurnText.setString("All Turns Complete !");
 						m_uiTurnText.setFillColor(Color::White);
+						m_uiGameStatus.setString("Game Over !\n DRAW the Match!");
 						ChangeGameState(GameState::Draw);
 					}
 				}
@@ -280,3 +296,67 @@ void Game::Update(RenderWindow& window)
 
 	Draw(window);
 }
+
+GameMove Game::CheckWinner()
+{
+	for (int i=0;i<3;i++)
+	{
+		if (m_boardArray[i + 2 * i] == m_boardArray[i+1 + 2 * i] &&
+			m_boardArray[i + 1 + 2 * i] == m_boardArray[i + 2 + 2 * i]&&
+			m_boardArray[i + 2 + 2 * i] == m_boardArray[i + 2 * i])
+		{
+			if (m_boardArray[i + 2 * i] == 1)
+			{
+				return GameMove::X;
+			}
+			else if (m_boardArray[i + 2 * i] == 2)
+			{
+				return GameMove::O;
+			}
+		}
+		if (m_boardArray[i] == m_boardArray[3 +i] &&
+			m_boardArray[3+i] == m_boardArray[6+i] &&
+			m_boardArray[6+i] == m_boardArray[0+i])
+		{
+			if (m_boardArray[i] == 1)
+			{
+				return GameMove::X;
+			}
+			else if (m_boardArray[i] == 2)
+			{
+				return GameMove::O;
+			}
+		}
+	}
+
+	
+	//Diagonal
+	if (m_boardArray[0] == m_boardArray[4]  &&
+		m_boardArray[4]==m_boardArray[8] &&
+		m_boardArray[8] == m_boardArray[0])
+	{
+		if (m_boardArray[0] == 1)
+		{
+			return GameMove::X;
+		}
+		else if (m_boardArray[0] == 2)
+		{
+			return GameMove::O;
+		}
+	}
+	if (m_boardArray[2] == m_boardArray[4] &&
+		m_boardArray[4]  ==m_boardArray[6]&&
+		m_boardArray[6] == m_boardArray[2])
+	{
+		if (m_boardArray[2] == 1)
+		{
+			return GameMove::X;
+		}
+		else if (m_boardArray[2] == 2)
+		{
+			return GameMove::O;
+		}
+	}
+	return GameMove::None;
+}
+
