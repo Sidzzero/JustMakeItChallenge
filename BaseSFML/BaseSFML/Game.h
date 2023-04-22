@@ -38,6 +38,7 @@ private:
 	GameState m_eState;
 	GameType m_eGameType;
 	void Draw(RenderWindow& window);
+	void Input(RenderWindow& window);
 
 	//GRahpics
 	sf::Texture m_texBG;
@@ -49,6 +50,9 @@ private:
 	sf::Sprite m_spMainPlayer;
 	sf::Sprite m_spSecPlayer;
 	sf::Sprite m_spBoard;
+
+	Font m_font;
+	Text m_uiStateText;
 
 };
 
