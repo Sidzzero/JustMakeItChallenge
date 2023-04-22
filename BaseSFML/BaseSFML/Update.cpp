@@ -82,6 +82,7 @@ void Game::ChangeGameState(GameState a_GameState)
 	default:
 		break;
 	}
+	m_eState = a_GameState;
 }
 void Game::ChangeTurn()
 {
@@ -217,9 +218,35 @@ void Game::Update(RenderWindow& window)
 
 
 		}
-		else 
+		else if(m_eState == GameState::Paused)
 		{
+			//TODO
+		}
+		else
+		{
+			if (DetectTextCollision(
+				m_MousePointer.getGlobalBounds(),
+				Color::Black, Color::White,
+				m_uiMainMenu
+			))
+			{
+				if (Mouse::isButtonPressed(Mouse::Left))
+				{
+					ChangeState(MainMenu);
+				}
 
+			}
+			else if (DetectTextCollision(
+				m_MousePointer.getGlobalBounds(),
+				Color::Black, Color::White,
+				m_uiPlayAgain
+			))
+			{
+				if (Mouse::isButtonPressed(Mouse::Left))
+				{
+					ChangeState(Menu::GameMenu);
+				}
+			}
 		}
 	
 		break;
