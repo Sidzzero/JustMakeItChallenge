@@ -54,6 +54,9 @@ void SetupFont(Text &text ,Font &font, int Size,float x , float y,const string t
 	text.setPosition(x, y);
 	text.setCharacterSize(Size);
 	text.setString(textToDisplay);
+	text.setOutlineThickness(1.8f);
+	text.setOutlineColor(Color::Black);
+	text.setFillColor(Color::Green);
 }
 
 void Game::Draw(RenderWindow& window)
@@ -61,7 +64,7 @@ void Game::Draw(RenderWindow& window)
 	window.draw(m_spBG);
 	for (auto const& value : m_vDrawableTextList)
 	{
-		window.draw(value);
+		window.draw(*value);
 	}
 	window.draw(m_uiStateText);
 	window.draw(m_MousePointer);

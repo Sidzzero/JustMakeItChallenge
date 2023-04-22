@@ -59,7 +59,7 @@ private:
 	Text m_uiQuitTxt;
 	sf::CircleShape m_MousePointer;
 
-	vector<Text> m_vDrawableTextList;
+	vector<Text*> m_vDrawableTextList;
 
 };
 

@@ -1,17 +1,34 @@
 #include "Game.h"
+bool DetectTextCollision(const FloatRect MousePos ,Color OldColor ,Color NewColor,sf::Text &text )
+{
+	if (MousePos.intersects(text.getGlobalBounds()))
+	{
+		text.setOutlineColor(NewColor);
+		return true;
+	}
+	else
+	{
+		text.setOutlineColor(OldColor);
+		return false;
+	}
+}
+
 void Game::ChangeState(Menu a_NewMenuState)
 {
 	m_vDrawableTextList.clear();
 	switch (a_NewMenuState)
 	{
 	case MainMenu:
-		m_vDrawableTextList.push_back(m_uiPlayerSinglePlayerTxt);
-		m_vDrawableTextList.push_back(m_uiPlayerTwoPLayerTxt);
-		m_vDrawableTextList.push_back(m_uiQuitTxt);
+		m_vDrawableTextList.push_back(&m_uiPlayerSinglePlayerTxt);
+		m_vDrawableTextList.push_back(&m_uiPlayerTwoPLayerTxt);
+		m_vDrawableTextList.push_back(&m_uiQuitTxt);
+		m_uiStateText.setString("Main Menu");
+		m_spBG.setColor(Color::White);
+		
 		break;
 	case GameMenu:
-
-
+		m_uiStateText.setString("Game Menu");
+		m_spBG.setColor(Color::Green);
 		break;
 	default:
 		break;
@@ -33,16 +50,31 @@ void Game::Update(RenderWindow& window)
 	switch (m_eMenu)
 	{
 	case MainMenu:
-		m_spBG.setColor(Color::White);
-		m_uiStateText.setString("Main Menu");
+	
 
 		//----Collision Check
+		DetectTextCollision(
+			m_MousePointer.getGlobalBounds(), 
+			Color::Black,Color::White, 
+			m_uiPlayerSinglePlayerTxt
+		);
+		DetectTextCollision(
+			m_MousePointer.getGlobalBounds(),
+			Color::Black, Color::White,
+			m_uiPlayerTwoPLayerTxt
+		);
+		DetectTextCollision(
+			m_MousePointer.getGlobalBounds(),
+			Color::Black, Color::White,
+			m_uiQuitTxt
+		);
+
 		
 		//----End of Collision Check
 		break;
 	case GameMenu:
-		m_spBG.setColor(Color::Green);
-		m_uiStateText.setString("Game Menu");
+		
+	
 		break;
 	default:
 		cout << "Invalid Menu !"<<endl;
