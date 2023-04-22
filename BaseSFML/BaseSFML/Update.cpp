@@ -29,6 +29,10 @@ void Game::ChangeState(Menu a_NewMenuState)
 	case GameMenu:
 		m_uiStateText.setString("Game Menu");
 		m_spBG.setColor(Color::Green);
+		m_vDrawableSpriteList.push_back(&m_spMainPlayer);
+		m_vDrawableSpriteList.push_back(&m_spSecPlayer);
+		m_vDrawableSpriteList.push_back(&m_spBoard);
+
 		break;
 	default:
 		break;

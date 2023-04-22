@@ -1,5 +1,5 @@
 #include "Game.h"
-void LoadTextureToSprite(const std::string path,Texture& tex, Sprite& sprite);
+void LoadTextureToSprite(const std::string path,Texture& tex, Sprite& sprite, Color a_Color,Vector2f vScale);
 void SetupFont(Text& text, Font& font, int Size, float x, float y, const string textToDisplay);
 Game::Game()
 {
@@ -14,14 +14,16 @@ void Game::Init(bool m_bForceTexture)
 	if (m_bForceTexture)
 	{
 		//m_texBG.loadFromFile("graphics/BG.png");
-		LoadTextureToSprite("graphics/Bg.png",m_texBG,m_spBG);
+		LoadTextureToSprite("graphics/Bg.png",m_texBG,m_spBG,Color::White,Vector2f(1.0f,1.0f));
 		m_spBG.setPosition(0,0);
 		auto videoMode = VideoMode::getDesktopMode();
 		m_spBG.setScale(videoMode.width/ m_spBG.getLocalBounds().width, videoMode.height / m_spBG.getLocalBounds().height);
 
-		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer);
-		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer);
-		LoadTextureToSprite("graphics/Board.png", m_texBoard, m_spBoard);
+		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::White, Vector2f(0.2f, 0.2f));
+		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer, Color::White, Vector2f(0.2f, 0.2f));
+		LoadTextureToSprite("graphics/Board.png", m_texBoard, m_spBoard, Color::White, Vector2f(1.4f,1.4f));
+		m_spBoard.setPosition(videoMode.width/3.1f, videoMode.height/3.8f);
+		
 		m_font.loadFromFile("fonts/KOMIKAP_.ttf");
 		m_uiStateText.setFont(m_font);
 		m_uiStateText.setPosition(0,0);
@@ -81,8 +83,10 @@ void Game::Input(RenderWindow& window)
 void Game::Cleanup()
 {
 }
-void LoadTextureToSprite(const std::string path,Texture &tex , Sprite &sprite )
+void LoadTextureToSprite(const std::string path,Texture &tex , Sprite &sprite,Color a_Color,Vector2f vScale )
 {
 	tex.loadFromFile(path);
 	sprite.setTexture(tex);
+	sprite.setColor(a_Color);
+	sprite.setScale(vScale);
 }
