@@ -19,10 +19,13 @@ void Game::Init(bool m_bForceTexture)
 		auto videoMode = VideoMode::getDesktopMode();
 		m_spBG.setScale(videoMode.width/ m_spBG.getLocalBounds().width, videoMode.height / m_spBG.getLocalBounds().height);
 
-		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::White, Vector2f(0.2f, 0.2f));
-		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer, Color::White, Vector2f(0.2f, 0.2f));
+		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::White, Vector2f(0.08f, 0.08f));
+		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer, Color::White, Vector2f(0.08f, 0.08f));
 		LoadTextureToSprite("graphics/Board.png", m_texBoard, m_spBoard, Color::White, Vector2f(1.4f,1.4f));
+		
+		//Game Menu Setup
 		m_spBoard.setPosition(videoMode.width/3.1f, videoMode.height/3.8f);
+
 		
 		m_font.loadFromFile("fonts/KOMIKAP_.ttf");
 		m_uiStateText.setFont(m_font);
