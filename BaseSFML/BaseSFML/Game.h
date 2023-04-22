@@ -54,12 +54,17 @@ private:
 
 	Font m_font;
 	Text m_uiStateText;
+	sf::CircleShape m_MousePointer;
+
+	//Main Menu
 	Text m_uiPlayerSinglePlayerTxt;
 	Text m_uiPlayerTwoPLayerTxt;
 	Text m_uiQuitTxt;
-	sf::CircleShape m_MousePointer;
+	
+	//Game Menu
 
 	vector<Text*> m_vDrawableTextList;
+	vector<Sprite*> m_vDrawableSpriteList;
 
 };
 

@@ -50,25 +50,45 @@ void Game::Update(RenderWindow& window)
 	switch (m_eMenu)
 	{
 	case MainMenu:
-	
-
-		//----Collision Check
-		DetectTextCollision(
-			m_MousePointer.getGlobalBounds(), 
-			Color::Black,Color::White, 
+		//----Collision Check------
+    //Text Collision
+	{
+		
+		if (DetectTextCollision(
+			m_MousePointer.getGlobalBounds(),
+			Color::Black, Color::White,
 			m_uiPlayerSinglePlayerTxt
-		);
-		DetectTextCollision(
+		))
+		{
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				ChangeState(GameMenu);
+			}
+
+		}
+		else if (DetectTextCollision(
 			m_MousePointer.getGlobalBounds(),
 			Color::Black, Color::White,
 			m_uiPlayerTwoPLayerTxt
-		);
-		DetectTextCollision(
+		))
+		{
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				ChangeState(GameMenu);
+			}
+		}
+		else if (DetectTextCollision(
 			m_MousePointer.getGlobalBounds(),
 			Color::Black, Color::White,
 			m_uiQuitTxt
-		);
-
+		))
+		{
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				window.close();
+			}
+		}
+	}
 		
 		//----End of Collision Check
 		break;

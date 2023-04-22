@@ -66,6 +66,10 @@ void Game::Draw(RenderWindow& window)
 	{
 		window.draw(*value);
 	}
+	for (auto const& value : m_vDrawableSpriteList)
+	{
+		window.draw(*value);
+	}
 	window.draw(m_uiStateText);
 	window.draw(m_MousePointer);
 }
