@@ -16,6 +16,9 @@ void Game::Init(bool m_bForceTexture)
 		//m_texBG.loadFromFile("graphics/BG.png");
 		LoadTextureToSprite("graphics/Bg.png",m_texBG,m_spBG);
 		m_spBG.setPosition(0,0);
+		auto videoMode = VideoMode::getDesktopMode();
+		m_spBG.setScale(videoMode.width/ m_spBG.getLocalBounds().width, videoMode.height / m_spBG.getLocalBounds().height);
+
 		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer);
 		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer);
 		LoadTextureToSprite("graphics/Board.png", m_texBoard, m_spBoard);
