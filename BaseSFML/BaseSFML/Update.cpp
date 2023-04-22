@@ -17,6 +17,7 @@ void Game::ChangeState(Menu a_NewMenuState)
 {
 	m_vDrawableTextList.clear();
 	m_vDrawableList.clear();
+
 	for (auto value: m_vMainPlayer)
 	{
 		m_vPoolMainPlayer.push_back(value);
@@ -47,10 +48,11 @@ void Game::ChangeState(Menu a_NewMenuState)
 		{
 			m_boardArray[i] = GameMove::None;
 		}
-		m_iTurn = GameMove::None;
 		m_uiStateText.setString("Game Menu");
 		m_spBG.setColor(Color::Green);
-		m_uiTurnText.setString("CurrentTurn:"+m_iTurn);
+		m_uiTurnText.setString("Press Enter to Start");
+		m_uiTurnText.setFillColor(Color::White);
+		m_iTurn = GameMove::None;
 		m_vDrawableTextList.push_back(&m_uiTurnText);
 	
 		for(int i=0;i<9;i++)
@@ -187,10 +189,12 @@ void Game::Update(RenderWindow& window)
 		//TODO:Switch player here
 		if (m_eState == GameState::Playing)
 		{
-			if (Keyboard::isKeyPressed(Keyboard::Return))
+			if (Keyboard::isKeyPressed(Keyboard::Return) && m_iTurn == GameMove::None)
 			{
 				m_iTurn = GameMove::X;
-				ChangeTurn();
+				m_uiTurnText.setString("X's turn");
+				m_uiTurnText.setFillColor(Color::Green);
+				
 			}
 			else if (Mouse::isButtonPressed(Mouse::Left))
 			{
