@@ -50,6 +50,18 @@ void Game::Init(bool m_bForceTexture)
 		SetupFont(m_uiQuitTxt, m_font, 55, temp_xCenter ,
 			temp_yCenter / 2 + 300, "Quit");
 
+		//---------------
+		SetupFont(m_uiTurnText, m_font, 35, temp_xCenter*0.1f,
+			temp_yCenter / 2 + 300, "StateUnknown");
+		//=============
+		SetupFont(m_uiGameStatus, m_font, 80, temp_xCenter,
+			temp_yCenter / 2 + 100, " Game Over ! \n ");
+
+		SetupFont(m_uiPlayAgain, m_font, 55, temp_xCenter,
+			temp_yCenter / 2 + 200, "Play Again");
+
+		SetupFont(m_uiMainMenu, m_font, 55, temp_xCenter,
+			temp_yCenter / 2 + 300, "Main Menu");
 	}
 	m_MousePointer.setRadius(10);
 	m_MousePointer.setFillColor(Color::Green);
@@ -58,6 +70,18 @@ void Game::Init(bool m_bForceTexture)
 	int temp_Yosset = temp_yCenter*0.48f;
 	int temp_Width = 200;
 	int temp_Height = 200;
+	m_BGForHide.setSize(sf::Vector2f(
+		videoMode.width * 0.9f, 
+		videoMode.height*0.9f));
+	m_BGForHide.setFillColor(Color(0, 0, 0,255*0.80f));
+	m_BGForHide.setOutlineColor(sf::Color::Blue);
+	m_BGForHide.setOutlineThickness(15);
+	
+	m_BGForHide.setOrigin(m_BGForHide.getGlobalBounds().width/2.0f, 
+		m_BGForHide.getGlobalBounds().height/2.0f);
+	m_BGForHide.setPosition
+	(videoMode.width * 0.5f,
+		videoMode.height * 0.5f);
 	for (int i=0;i<9;i++)
 	{
 		m_BoardSquare[i].setSize(sf::Vector2f(temp_Width, temp_Height));
@@ -106,15 +130,16 @@ void SetupFont(Text &text ,Font &font, int Size,float x , float y,const string t
 void Game::Draw(RenderWindow& window)
 {
 	window.draw(m_spBG);
+	for (auto const& value : m_vDrawableList)
+	{
+		window.draw(*value);
+	}
 	for (auto const& value : m_vDrawableTextList)
 	{
 		window.draw(*value);
 	}
 
-	for (auto const& value : m_vDrawableList)
-	{
-		window.draw(*value);
-	}
+
 
 	window.draw(m_uiStateText);
 	window.draw(m_MousePointer);

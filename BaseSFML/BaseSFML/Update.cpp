@@ -36,8 +36,11 @@ void Game::ChangeState(Menu a_NewMenuState)
 		
 		break;
 	case GameMenu:
+		m_iTurnCount = 1;
 		m_uiStateText.setString("Game Menu");
 		m_spBG.setColor(Color::Green);
+		m_uiTurnText.setString("CurrentTurn:"+m_iTurn);
+		m_vDrawableTextList.push_back(&m_uiTurnText);
 		m_vDrawableList.push_back(&m_spMainPlayer);
 		m_vDrawableList.push_back(&m_spSecPlayer);
 		//m_vDrawableSpriteList.push_back(&m_spBoard);
@@ -50,18 +53,50 @@ void Game::ChangeState(Menu a_NewMenuState)
 	}
 	m_eMenu = a_NewMenuState;
 }
+void Game::ChangeGameState(GameState a_GameState)
+{
+	switch (a_GameState)
+	{
+	case Playing:
+		break;
+	case Win:
+		m_vDrawableTextList.push_back(&m_uiGameStatus);
+		m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		m_vDrawableTextList.push_back(&m_uiMainMenu);
+		m_vDrawableList.push_back(&m_BGForHide);
+		break;
+	case Lose:
+		m_vDrawableTextList.push_back(&m_uiGameStatus);
+		m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		m_vDrawableTextList.push_back(&m_uiMainMenu);
+		m_vDrawableList.push_back(&m_BGForHide);
+		break;
+	case GameState::Draw:
+		m_vDrawableTextList.push_back(&m_uiGameStatus);
+		m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		m_vDrawableTextList.push_back(&m_uiMainMenu);
+		m_vDrawableList.push_back(&m_BGForHide);
+		break;
+	case Paused:
+		break;
+	default:
+		break;
+	}
+}
 void Game::ChangeTurn()
 {
 	if (m_iTurn== GameMove::None)
 	{
 		throw "Exception :Game not started!";
 	}
+
 	if (m_iTurn == GameMove::X)
 	{
 		m_vMainPlayer.push_back(m_vPoolMainPlayer.back());
 		m_vDrawableList.push_back(m_vPoolMainPlayer.back());
 		m_vPoolMainPlayer.pop_back();
 		m_iTurn = GameMove::O;
+		m_uiTurnText.setString("CurrentTurn: O's turn");
 	}
 	else if (m_iTurn == GameMove::O)
 	{
@@ -69,6 +104,7 @@ void Game::ChangeTurn()
 		m_vDrawableList.push_back(m_vPoolSecondaryPlayer.back());
 		m_vPoolSecondaryPlayer.pop_back();
 		m_iTurn = GameMove::X;
+		m_uiTurnText.setString("CurrentTurn: X's turn");
 	}
 }
 void Game::Update(RenderWindow& window)
@@ -168,7 +204,13 @@ void Game::Update(RenderWindow& window)
 								m_BoardSquare[i].getGlobalBounds().top);
 						}
 						ChangeTurn();
+						m_iTurnCount++;
 						break;
+					}
+					else if (m_iTurnCount >9)
+					{
+						m_uiTurnText.setString("All Turns Complete !");
+						ChangeGameState(GameState::Draw);
 					}
 				}
 			}

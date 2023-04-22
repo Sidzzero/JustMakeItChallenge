@@ -47,7 +47,8 @@ private:
 	void Draw(RenderWindow& window);
 	void Input(RenderWindow& window);
 	void ChangeState(Menu a_NewMenuState);
-	
+	void ChangeGameState(GameState a_GameState);
+	sf::RectangleShape m_BGForHide;
 	//GRahpics
 	sf::Texture m_texBG;
 	sf::Texture m_texMainPlayer;
@@ -75,9 +76,13 @@ private:
 	Text m_uiQuitTxt;
 	
 	//Game Menu
+	Text m_uiTurnText;
+	Text m_uiGameStatus;
+	Text m_uiPlayAgain;
+	Text m_uiMainMenu;
 	void ChangeTurn();
 	GameMove m_iTurn = GameMove::X;
-	int m_iScore = 0;
+	int m_iTurnCount = 0;
 	sf::RectangleShape m_BoardSquare[9];
 
 	vector<Text*> m_vDrawableTextList;
