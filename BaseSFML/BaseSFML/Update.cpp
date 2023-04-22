@@ -16,6 +16,7 @@ bool DetectTextCollision(const FloatRect MousePos ,Color OldColor ,Color NewColo
 void Game::ChangeState(Menu a_NewMenuState)
 {
 	m_vDrawableTextList.clear();
+	m_vDrawableList.clear();
 	switch (a_NewMenuState)
 	{
 	case MainMenu:
@@ -29,9 +30,11 @@ void Game::ChangeState(Menu a_NewMenuState)
 	case GameMenu:
 		m_uiStateText.setString("Game Menu");
 		m_spBG.setColor(Color::Green);
-		m_vDrawableSpriteList.push_back(&m_spMainPlayer);
-		m_vDrawableSpriteList.push_back(&m_spSecPlayer);
-		m_vDrawableSpriteList.push_back(&m_spBoard);
+		m_vDrawableList.push_back(&m_spMainPlayer);
+		m_vDrawableList.push_back(&m_spSecPlayer);
+		//m_vDrawableSpriteList.push_back(&m_spBoard);
+		for(int i=0;i<9;i++)
+		m_vDrawableList.push_back(&m_BoardSquare[i]);
 
 		break;
 	default:
@@ -41,6 +44,7 @@ void Game::ChangeState(Menu a_NewMenuState)
 }
 void Game::Update(RenderWindow& window)
 {
+	auto temp_mousePos = Mouse::getPosition();
 	if (Keyboard::isKeyPressed(Keyboard::Num2))
 	{
 		//m_eMenu = Menu::GameMenu;
@@ -98,6 +102,19 @@ void Game::Update(RenderWindow& window)
 		break;
 	case GameMenu:
 		
+		if (m_eState == GameState::Playing)
+		{
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				m_spMainPlayer.setPosition(temp_mousePos.x,temp_mousePos.y);
+				auto temp_OneUnit= m_spBoard.getGlobalBounds().left+ m_spBoard.getGlobalBounds().width/3.0f;
+				m_spMainPlayer.setPosition(temp_OneUnit, temp_mousePos.y);
+			}
+		}
+		else
+		{
+
+		}
 	
 		break;
 	default:

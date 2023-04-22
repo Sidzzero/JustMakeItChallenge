@@ -11,12 +11,15 @@ void Game::Init(bool m_bForceTexture)
 	m_eMenu = Menu::MainMenu;
 	m_eState = GameState::Playing;
 	m_eGameType = GameType::PvAI;
+	auto videoMode = VideoMode::getDesktopMode();
+	float temp_xCenter = videoMode.width / 2;
+	float temp_yCenter = videoMode.height / 2;
 	if (m_bForceTexture)
 	{
 		//m_texBG.loadFromFile("graphics/BG.png");
 		LoadTextureToSprite("graphics/Bg.png",m_texBG,m_spBG,Color::White,Vector2f(1.0f,1.0f));
 		m_spBG.setPosition(0,0);
-		auto videoMode = VideoMode::getDesktopMode();
+		
 		m_spBG.setScale(videoMode.width/ m_spBG.getLocalBounds().width, videoMode.height / m_spBG.getLocalBounds().height);
 
 		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::White, Vector2f(0.08f, 0.08f));
@@ -33,8 +36,7 @@ void Game::Init(bool m_bForceTexture)
 		m_uiStateText.setFillColor(Color::Cyan);
 		m_uiStateText.setCharacterSize(75);
 
-		float temp_xCenter = videoMode.width / 2;
-		float temp_yCenter = videoMode.height / 2;
+		
 		SetupFont(m_uiPlayerSinglePlayerTxt, m_font,55, temp_xCenter ,
 			temp_yCenter / 2 +100,"Single Player");
 
@@ -47,6 +49,36 @@ void Game::Init(bool m_bForceTexture)
 	}
 	m_MousePointer.setRadius(10);
 	m_MousePointer.setFillColor(Color::Green);
+
+	int temp_StartXOffset = 1;
+	int temp_Yosset = temp_yCenter*0.48f;
+	int temp_Width = 200;
+	int temp_Height = 200;
+	for (int i=0;i<9;i++)
+	{
+		m_BoardSquare[i].setSize(sf::Vector2f(temp_Width, temp_Height));
+		m_BoardSquare[i].setFillColor(Color(0, 0, 0, 0));
+		m_BoardSquare[i].setOutlineColor(sf::Color::Blue);
+		m_BoardSquare[i].setOutlineThickness(5);
+		
+	
+			m_BoardSquare[i].setPosition
+			(temp_xCenter*0.49f + temp_StartXOffset * temp_Width,
+		       temp_Yosset);
+			if ((i+1)!=1 && ((i+1) % 3) == 0)
+			{
+				cout <<endl<< (i+1)<<endl;
+				temp_Yosset += temp_Height;
+			}
+			temp_StartXOffset++;
+			if (temp_StartXOffset > 3)
+			{
+				temp_StartXOffset = 1;
+			}
+			;
+		
+	}
+	
 
 	ChangeState(MainMenu);
 }
@@ -71,10 +103,12 @@ void Game::Draw(RenderWindow& window)
 	{
 		window.draw(*value);
 	}
-	for (auto const& value : m_vDrawableSpriteList)
+
+	for (auto const& value : m_vDrawableList)
 	{
 		window.draw(*value);
 	}
+
 	window.draw(m_uiStateText);
 	window.draw(m_MousePointer);
 }

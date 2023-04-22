@@ -62,9 +62,13 @@ private:
 	Text m_uiQuitTxt;
 	
 	//Game Menu
+	int m_iTurn = 0;
+	sf::RectangleShape m_BoardSquare[9];
 
 	vector<Text*> m_vDrawableTextList;
-	vector<Sprite*> m_vDrawableSpriteList;
+	
+	vector<Drawable*> m_vDrawableList;
+
 
 };
 
