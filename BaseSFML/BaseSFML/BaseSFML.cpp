@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "SFML/Graphics.hpp"
+#include "Game.h"
 int main()
 {
     std::cout << "Challenge Games Made using SFML\n";
@@ -9,6 +10,11 @@ int main()
     sf::RenderWindow window(sf::VideoMode (sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
     sf::CircleShape shape(100.0f);
     shape.setFillColor(sf::Color::Green);
+
+    //Game Decleartions
+    Game* m_game = nullptr;
+    m_game = new Game();
+    m_game->Init(true);
     
     while (window.isOpen())
     {
@@ -19,14 +25,15 @@ int main()
             {
                 window.close();
             }
-
         }
         window.clear();
-        window.draw(shape);
+        m_game->Update(window);
         window.display();
     }
 
-    
+    m_game->Cleanup();
+    delete m_game;
+    m_game = nullptr;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
