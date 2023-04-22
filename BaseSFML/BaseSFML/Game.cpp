@@ -1,6 +1,6 @@
 #include "Game.h"
 void LoadTextureToSprite(const std::string path,Texture& tex, Sprite& sprite);
-
+void SetupFont(Text& text, Font& font, int Size, float x, float y, const string textToDisplay);
 Game::Game()
 {
 	Init(true);
@@ -27,15 +27,44 @@ void Game::Init(bool m_bForceTexture)
 		m_uiStateText.setPosition(0,0);
 		m_uiStateText.setFillColor(Color::Cyan);
 		m_uiStateText.setCharacterSize(75);
+
+		float temp_xCenter = videoMode.width / 2;
+		float temp_yCenter = videoMode.height / 2;
+		SetupFont(m_uiPlayerSinglePlayerTxt, m_font,55, temp_xCenter ,
+			temp_yCenter / 2 +100,"Single Player");
+
+		SetupFont(m_uiPlayerTwoPLayerTxt, m_font, 55, temp_xCenter ,
+			temp_yCenter / 2 + 200 , "Two Player");
+
+		SetupFont(m_uiQuitTxt, m_font, 55, temp_xCenter ,
+			temp_yCenter / 2 + 300, "Quit");
+
 	}
+	m_MousePointer.setRadius(10);
+	m_MousePointer.setFillColor(Color::Green);
+
+	ChangeState(MainMenu);
 }
 
+void SetupFont(Text &text ,Font &font, int Size,float x , float y,const string textToDisplay)
+{
 
+	text.setFont(font);
+	text.setOrigin(text.getGlobalBounds().width/2, text.getGlobalBounds().height/2);
+	text.setPosition(x, y);
+	text.setCharacterSize(Size);
+	text.setString(textToDisplay);
+}
 
 void Game::Draw(RenderWindow& window)
 {
 	window.draw(m_spBG);
+	for (auto const& value : m_vDrawableTextList)
+	{
+		window.draw(value);
+	}
 	window.draw(m_uiStateText);
+	window.draw(m_MousePointer);
 }
 
 void Game::Input(RenderWindow& window)

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include "SFML/Graphics.hpp"
 using namespace std;
 using namespace sf;
@@ -39,7 +40,7 @@ private:
 	GameType m_eGameType;
 	void Draw(RenderWindow& window);
 	void Input(RenderWindow& window);
-
+	void ChangeState(Menu a_NewMenuState);
 	//GRahpics
 	sf::Texture m_texBG;
 	sf::Texture m_texMainPlayer;
@@ -53,6 +54,12 @@ private:
 
 	Font m_font;
 	Text m_uiStateText;
+	Text m_uiPlayerSinglePlayerTxt;
+	Text m_uiPlayerTwoPLayerTxt;
+	Text m_uiQuitTxt;
+	sf::CircleShape m_MousePointer;
+
+	vector<Text> m_vDrawableTextList;
 
 };
 
