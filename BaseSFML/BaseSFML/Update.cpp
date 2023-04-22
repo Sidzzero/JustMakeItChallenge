@@ -26,6 +26,9 @@ void Game::ChangeState(Menu a_NewMenuState)
 	{
 		m_vPoolSecondaryPlayer.push_back(value);
 	}
+	m_vMainPlayer.clear();
+	m_vSecondaryPlayer.clear();
+
 	switch (a_NewMenuState)
 	{
 	case MainMenu:
@@ -37,7 +40,7 @@ void Game::ChangeState(Menu a_NewMenuState)
 		
 		m_eMenu = Menu::MainMenu;
 		m_eState = GameState::Playing;
-		m_eGameType = GameType::PvAI;
+	
 		break;
 	case GameMenu:
 		m_iTurnCount = 1;
@@ -135,7 +138,7 @@ void Game::Update(RenderWindow& window)
 		{
 			m_iTurn = GameMove::O;
 		}
-		else if(m_iTurn == GameMove::O)
+		else if (m_iTurn == GameMove::O)
 		{
 			m_iTurn = GameMove::X;
 		}
@@ -144,9 +147,9 @@ void Game::Update(RenderWindow& window)
 	{
 	case MainMenu:
 		//----Collision Check------
-    //Text Collision
+	//Text Collision
 	{
-		
+
 		if (DetectTextCollision(
 			m_MousePointer.getGlobalBounds(),
 			Color::Black, Color::White,
@@ -155,6 +158,7 @@ void Game::Update(RenderWindow& window)
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
+				m_eGameType = GameType::PvAI;
 				ChangeState(GameMenu);
 			}
 
@@ -167,6 +171,7 @@ void Game::Update(RenderWindow& window)
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
+				m_eGameType = GameType::PvP;
 				ChangeState(GameMenu);
 			}
 		}
@@ -182,9 +187,9 @@ void Game::Update(RenderWindow& window)
 			}
 		}
 	}
-		
-		//----End of Collision Check
-		break;
+
+	//----End of Collision Check
+	break;
 	case GameMenu:
 		//TODO:Switch player here
 		if (m_eState == GameState::Playing)
@@ -194,109 +199,215 @@ void Game::Update(RenderWindow& window)
 				m_iTurn = GameMove::X;
 				m_uiTurnText.setString("X's turn");
 				m_uiTurnText.setFillColor(Color::Green);
-				
+
 			}
 			else if (Mouse::isButtonPressed(Mouse::Left))
 			{
-		       if(m_iTurn != GameMove::None)
-				for (int i=0;i<9;i++)
+				if (m_iTurn != GameMove::None)
 				{
-					if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
-						m_boardArray[i] == GameMove::None)
+					if (m_eGameType == GameType::PvAI)
 					{
-						m_boardArray[i] = m_iTurn;
-						if (m_iTurn == GameMove::X)
+						if (m_iTurn == m_iAITurn)
 						{
-							m_vPoolMainPlayer.back()->setPosition
-							(m_BoardSquare[i].getGlobalBounds().left,
-								m_BoardSquare[i].getGlobalBounds().top);
-							m_iTurnCount++;
-						}
-						else if (m_iTurn == GameMove::O)
-						{
-							m_vPoolSecondaryPlayer.back()->setPosition
-							    (m_BoardSquare[i].getGlobalBounds().left,
-								m_BoardSquare[i].getGlobalBounds().top);
-							m_iTurnCount++;
-						}
-						auto Result = CheckWinner();
-						if (Result != GameMove::None)
-						{
-							m_uiTurnText.setString("Turn Completed So Far !"+m_iTurnCount);
-							m_uiTurnText.setFillColor(Color::White);
-							auto temp_WinnerMsg = "Game Over ! Winner is X";
-							if (Result == GameMove::O)
+							srand(time(NULL));
+							int temp_Index = 0 + rand() % 9;
+							while (m_boardArray[temp_Index] != 0)
 							{
-								auto temp_WinnerMsg = "Game Over ! Winner is O";
+								temp_Index = 0 + rand() % 9;
 							}
-							m_uiGameStatus.setString(temp_WinnerMsg);
-							ChangeGameState(GameState::Win);
+							m_boardArray[temp_Index] = m_iAITurn;
+							if (m_iTurn == GameMove::X)
+							{
+								m_vPoolMainPlayer.back()->setPosition
+								(m_BoardSquare[temp_Index].getGlobalBounds().left,
+									m_BoardSquare[temp_Index].getGlobalBounds().top);
+								m_iTurnCount++;
+							}
+							else if (m_iTurn == GameMove::O)
+							{
+								m_vPoolSecondaryPlayer.back()->setPosition
+								(m_BoardSquare[temp_Index].getGlobalBounds().left,
+									m_BoardSquare[temp_Index].getGlobalBounds().top);
+								m_iTurnCount++;
+							}
+							//Todo:Codeduplications
+							auto Result = CheckWinner();
+							if (Result != GameMove::None)
+							{
+								m_uiTurnText.setString("Turn:" + m_iTurnCount);//TODO not displayin g
+								m_uiTurnText.setFillColor(Color::White);
+								auto temp_WinnerMsg = "Game Over ! A.I Winner is X";
+								if (Result == GameMove::O)
+								{
+									temp_WinnerMsg = "Game Over ! A.I Winner is O";
+								}
+								m_uiGameStatus.setString(temp_WinnerMsg);
+								ChangeTurn();//For view
+								ChangeGameState(GameState::Win);
+							}
+							else
+							{
+								ChangeTurn();
+							}
+							break;
 						}
-						else
+						else//AI player
 						{
-							ChangeTurn();
+							for (int i = 0; i < 9; i++)
+							{
+								if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
+									m_boardArray[i] == GameMove::None)
+								{
+									m_boardArray[i] = m_iTurn;
+									if (m_iTurn == GameMove::X)
+									{
+										m_vPoolMainPlayer.back()->setPosition
+										(m_BoardSquare[i].getGlobalBounds().left,
+											m_BoardSquare[i].getGlobalBounds().top);
+										m_iTurnCount++;
+									}
+									else if (m_iTurn == GameMove::O)
+									{
+										m_vPoolSecondaryPlayer.back()->setPosition
+										(m_BoardSquare[i].getGlobalBounds().left,
+											m_BoardSquare[i].getGlobalBounds().top);
+										m_iTurnCount++;
+									}
+									auto Result = CheckWinner();
+									if (Result != GameMove::None)
+									{
+										m_uiTurnText.setString("Turn:" + m_iTurnCount);//TODO not displayin g
+										m_uiTurnText.setFillColor(Color::White);
+										auto temp_WinnerMsg = "Game Over ! Winner is X";
+										if (Result == GameMove::O)
+										{
+											temp_WinnerMsg = "Game Over ! Winner is O";
+										}
+										m_uiGameStatus.setString(temp_WinnerMsg);
+										ChangeTurn();//For view
+										ChangeGameState(GameState::Win);
+									}
+									else
+									{
+										ChangeTurn();
+									}
+									break;
+								}
+								else if (m_iTurnCount > 9)
+								{
+									m_uiTurnText.setString("All Turns Complete !");
+									m_uiTurnText.setFillColor(Color::White);
+									m_uiGameStatus.setString("Game Over !\n DRAW the Match!");
+									ChangeGameState(GameState::Draw);
+								}
+							}
 						}
-						break;
+
 					}
-					else if (m_iTurnCount >9)
+					else
+						for (int i = 0; i < 9; i++)
+						{
+							if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
+								m_boardArray[i] == GameMove::None)
+							{
+								m_boardArray[i] = m_iTurn;
+								if (m_iTurn == GameMove::X)
+								{
+									m_vPoolMainPlayer.back()->setPosition
+									(m_BoardSquare[i].getGlobalBounds().left,
+										m_BoardSquare[i].getGlobalBounds().top);
+									m_iTurnCount++;
+								}
+								else if (m_iTurn == GameMove::O)
+								{
+									m_vPoolSecondaryPlayer.back()->setPosition
+									(m_BoardSquare[i].getGlobalBounds().left,
+										m_BoardSquare[i].getGlobalBounds().top);
+									m_iTurnCount++;
+								}
+								auto Result = CheckWinner();
+								if (Result != GameMove::None)
+								{
+									m_uiTurnText.setString("Turn:" + m_iTurnCount);//TODO not displayin g
+									m_uiTurnText.setFillColor(Color::White);
+									auto temp_WinnerMsg = "Game Over ! Winner is X";
+									if (Result == GameMove::O)
+									{
+										temp_WinnerMsg = "Game Over ! Winner is O";
+									}
+									m_uiGameStatus.setString(temp_WinnerMsg);
+									ChangeTurn();//For view
+									ChangeGameState(GameState::Win);
+								}
+								else
+								{
+									ChangeTurn();
+								}
+								break;
+							}
+							else if (m_iTurnCount > 9)
+							{
+								m_uiTurnText.setString("All Turns Complete !");
+								m_uiTurnText.setFillColor(Color::White);
+								m_uiGameStatus.setString("Game Over !\n DRAW the Match!");
+								ChangeGameState(GameState::Draw);
+							}
+						}
+
+
+				}
+
+
+
+			}
+		}
+           else if (m_eState == GameState::Paused)
+			{
+				//TODO
+			}
+			else
+			{
+				if (DetectTextCollision(
+					m_MousePointer.getGlobalBounds(),
+					Color::Black, Color::White,
+					m_uiMainMenu
+				))
+				{
+					if (Mouse::isButtonPressed(Mouse::Left))
 					{
-						m_uiTurnText.setString("All Turns Complete !");
-						m_uiTurnText.setFillColor(Color::White);
-						m_uiGameStatus.setString("Game Over !\n DRAW the Match!");
-						ChangeGameState(GameState::Draw);
+						ChangeState(MainMenu);
+					}
+
+				}
+				else if (DetectTextCollision(
+					m_MousePointer.getGlobalBounds(),
+					Color::Black, Color::White,
+					m_uiPlayAgain
+				))
+				{
+					if (Mouse::isButtonPressed(Mouse::Left))
+					{
+						ChangeState(Menu::GameMenu);
 					}
 				}
 			}
 
-			
+			break;
 
-		}
-		else if(m_eState == GameState::Paused)
-		{
-			//TODO
-		}
-		else
-		{
-			if (DetectTextCollision(
-				m_MousePointer.getGlobalBounds(),
-				Color::Black, Color::White,
-				m_uiMainMenu
-			))
-			{
-				if (Mouse::isButtonPressed(Mouse::Left))
-				{
-					ChangeState(MainMenu);
-				}
+		
+			default:
+				cout << "Invalid Menu !" << endl;
+				break;
+		//Logics above
 
-			}
-			else if (DetectTextCollision(
-				m_MousePointer.getGlobalBounds(),
-				Color::Black, Color::White,
-				m_uiPlayAgain
-			))
-			{
-				if (Mouse::isButtonPressed(Mouse::Left))
-				{
-					ChangeState(Menu::GameMenu);
-				}
-			}
-		}
-	
-		break;
-	default:
-		cout << "Invalid Menu !"<<endl;
-		break;
+		
 	}
-	//Logics above
-
 	//Mouse
 	auto temp_MousePos = Mouse::getPosition();
 	m_MousePointer.setPosition(temp_MousePos.x, temp_MousePos.y);
 
-
 	Draw(window);
 }
-
 GameMove Game::CheckWinner()
 {
 	for (int i=0;i<3;i++)

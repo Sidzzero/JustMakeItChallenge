@@ -81,8 +81,11 @@ private:
 	Text m_uiPlayAgain;
 	Text m_uiMainMenu;
 	void ChangeTurn();
+
 	GameMove CheckWinner();
 	GameMove m_iTurn = GameMove::X;
+	GameMove m_iAITurn = GameMove::O;
+	vector<int> m_vREmainingPlace;
 	int m_iTurnCount = 0;
 	sf::RectangleShape m_BoardSquare[9];
 
