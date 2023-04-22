@@ -49,7 +49,7 @@ void Game::Init(bool m_bForceTexture)
 			temp_yCenter / 2 + 200 , "Two Player");
 
 		SetupFont(m_uiQuitTxt, m_font, 55, temp_xCenter ,
-			temp_yCenter / 2 + 300, "Quit");
+			temp_yCenter / 2 + 600, "Quit");
 
 		//---------------
 		SetupFont(m_uiTurnText, m_font, 35, temp_xCenter*0.89f,

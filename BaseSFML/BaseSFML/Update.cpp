@@ -40,12 +40,18 @@ void Game::ChangeState(Menu a_NewMenuState)
 		break;
 	case GameMenu:
 		m_iTurnCount = 1;
+		m_eMenu = Menu::MainMenu;
+		m_eState = GameState::Playing;
+
+		for (int i = 0; i < 9; i++)
+		{
+			m_boardArray[i] = GameMove::None;
+		}
+		m_iTurn = GameMove::None;
 		m_uiStateText.setString("Game Menu");
 		m_spBG.setColor(Color::Green);
 		m_uiTurnText.setString("CurrentTurn:"+m_iTurn);
 		m_vDrawableTextList.push_back(&m_uiTurnText);
-		//m_vDrawableList.push_back(&m_spMainPlayer);
-		//m_vDrawableList.push_back(&m_spSecPlayer);
 	
 		for(int i=0;i<9;i++)
 		m_vDrawableList.push_back(&m_BoardSquare[i]);
@@ -64,13 +70,13 @@ void Game::ChangeGameState(GameState a_GameState)
 		break;
 	case Win:
 		m_vDrawableTextList.push_back(&m_uiGameStatus);
-	//	m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		m_vDrawableTextList.push_back(&m_uiPlayAgain);
 		m_vDrawableTextList.push_back(&m_uiMainMenu);
 		m_vDrawableList.push_back(&m_BGForHide);
 		break;
 	case GameState::Draw:
 		m_vDrawableTextList.push_back(&m_uiGameStatus);
-		//m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		m_vDrawableTextList.push_back(&m_uiPlayAgain);
 		m_vDrawableTextList.push_back(&m_uiMainMenu);
 		m_vDrawableList.push_back(&m_BGForHide);
 		break;
@@ -85,7 +91,8 @@ void Game::ChangeTurn()
 {
 	if (m_iTurn== GameMove::None)
 	{
-		throw "Exception :Game not started!";
+		cout<< endl << "Exception :Game not started!"<<endl;
+		m_uiStateText.setString("Press Enter to Start");
 	}
 
 	if (m_iTurn == GameMove::X)
@@ -180,11 +187,14 @@ void Game::Update(RenderWindow& window)
 		//TODO:Switch player here
 		if (m_eState == GameState::Playing)
 		{
-			if (Mouse::isButtonPressed(Mouse::Left))
+			if (Keyboard::isKeyPressed(Keyboard::Return))
 			{
-				//m_spMainPlayer.setPosition(temp_mousePos.x,temp_mousePos.y);
-				//auto temp_OneUnit= m_spBoard.getGlobalBounds().left+ m_spBoard.getGlobalBounds().width/3.0f;
-				//m_spMainPlayer.setPosition(temp_OneUnit, temp_mousePos.y);
+				m_iTurn = GameMove::X;
+				ChangeTurn();
+			}
+			else if (Mouse::isButtonPressed(Mouse::Left))
+			{
+		       if(m_iTurn != GameMove::None)
 				for (int i=0;i<9;i++)
 				{
 					if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
@@ -196,15 +206,17 @@ void Game::Update(RenderWindow& window)
 							m_vPoolMainPlayer.back()->setPosition
 							(m_BoardSquare[i].getGlobalBounds().left,
 								m_BoardSquare[i].getGlobalBounds().top);
+							m_iTurnCount++;
 						}
 						else if (m_iTurn == GameMove::O)
 						{
 							m_vPoolSecondaryPlayer.back()->setPosition
 							    (m_BoardSquare[i].getGlobalBounds().left,
 								m_BoardSquare[i].getGlobalBounds().top);
+							m_iTurnCount++;
 						}
 						ChangeTurn();
-						m_iTurnCount++;
+						
 						break;
 					}
 					else if (m_iTurnCount >9)
@@ -216,6 +228,7 @@ void Game::Update(RenderWindow& window)
 				}
 			}
 
+			
 
 		}
 		else if(m_eState == GameState::Paused)
