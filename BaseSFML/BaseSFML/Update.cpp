@@ -42,6 +42,21 @@ void Game::ChangeState(Menu a_NewMenuState)
 	}
 	m_eMenu = a_NewMenuState;
 }
+void Game::ChangeTurn()
+{
+	if (m_iTurn== GameMove::None)
+	{
+		throw "Exception :Game not started!";
+	}
+	if (m_iTurn == GameMove::X)
+	{
+		m_iTurn = GameMove::O;
+	}
+	else if (m_iTurn == GameMove::O)
+	{
+		m_iTurn = GameMove::X;
+	}
+}
 void Game::Update(RenderWindow& window)
 {
 	auto temp_mousePos = Mouse::getPosition();
@@ -54,6 +69,17 @@ void Game::Update(RenderWindow& window)
 	{
 		m_eMenu = Menu::MainMenu;
 		ChangeState(Menu::MainMenu);
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num3))
+	{
+		if (m_iTurn == GameMove::X)
+		{
+			m_iTurn = GameMove::O;
+		}
+		else if(m_iTurn == GameMove::O)
+		{
+			m_iTurn = GameMove::X;
+		}
 	}
 	switch (m_eMenu)
 	{
@@ -101,15 +127,30 @@ void Game::Update(RenderWindow& window)
 		//----End of Collision Check
 		break;
 	case GameMenu:
-		
+		//TODO:Switch player here
 		if (m_eState == GameState::Playing)
 		{
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				m_spMainPlayer.setPosition(temp_mousePos.x,temp_mousePos.y);
-				auto temp_OneUnit= m_spBoard.getGlobalBounds().left+ m_spBoard.getGlobalBounds().width/3.0f;
-				m_spMainPlayer.setPosition(temp_OneUnit, temp_mousePos.y);
+				//m_spMainPlayer.setPosition(temp_mousePos.x,temp_mousePos.y);
+				//auto temp_OneUnit= m_spBoard.getGlobalBounds().left+ m_spBoard.getGlobalBounds().width/3.0f;
+				//m_spMainPlayer.setPosition(temp_OneUnit, temp_mousePos.y);
+				for (int i=0;i<9;i++)
+				{
+					if (m_BoardSquare[i].getGlobalBounds().contains(Vector2f(temp_mousePos)) &&
+						m_boardArray[i] == GameMove::None)
+					{
+						m_spMainPlayer.setPosition(
+							m_BoardSquare[i].getGlobalBounds().left,
+							m_BoardSquare[i].getGlobalBounds().top);
+						m_boardArray[i] = m_iTurn;
+						ChangeTurn();
+						break;
+					}
+				}
 			}
+
+
 		}
 		else
 		{

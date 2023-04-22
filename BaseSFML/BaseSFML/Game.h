@@ -23,6 +23,12 @@ enum GameType
 	PvAI,
 	PvP,
 };
+enum GameMove
+{
+	None = 0,
+	X = 1,
+	O = 2
+};
 class Game
 {
 public:
@@ -41,6 +47,7 @@ private:
 	void Draw(RenderWindow& window);
 	void Input(RenderWindow& window);
 	void ChangeState(Menu a_NewMenuState);
+	
 	//GRahpics
 	sf::Texture m_texBG;
 	sf::Texture m_texMainPlayer;
@@ -52,6 +59,9 @@ private:
 	sf::Sprite m_spSecPlayer;
 	sf::Sprite m_spBoard;
 
+	vector<Sprite> m_vMainPlayer;
+	vector<Sprite> m_vSecondaryPlayer;
+
 	Font m_font;
 	Text m_uiStateText;
 	sf::CircleShape m_MousePointer;
@@ -62,12 +72,18 @@ private:
 	Text m_uiQuitTxt;
 	
 	//Game Menu
-	int m_iTurn = 0;
+	void ChangeTurn();
+	GameMove m_iTurn = GameMove::X;
+	int m_iScore = 0;
 	sf::RectangleShape m_BoardSquare[9];
 
 	vector<Text*> m_vDrawableTextList;
 	
 	vector<Drawable*> m_vDrawableList;
+	int m_boardArray[9] = {
+		                   0,0,0,
+						   0,0,0,
+	                       0,0,0};
 
 
 };

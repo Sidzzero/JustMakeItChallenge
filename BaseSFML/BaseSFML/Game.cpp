@@ -14,6 +14,10 @@ void Game::Init(bool m_bForceTexture)
 	auto videoMode = VideoMode::getDesktopMode();
 	float temp_xCenter = videoMode.width / 2;
 	float temp_yCenter = videoMode.height / 2;
+	for (int i = 0; i < 9; i++)
+	{
+		m_boardArray[i] = GameMove::None;
+	}
 	if (m_bForceTexture)
 	{
 		//m_texBG.loadFromFile("graphics/BG.png");
@@ -76,7 +80,6 @@ void Game::Init(bool m_bForceTexture)
 				temp_StartXOffset = 1;
 			}
 			;
-		
 	}
 	
 
