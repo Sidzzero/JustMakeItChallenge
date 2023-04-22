@@ -26,10 +26,11 @@ void Game::Init(bool m_bForceTexture)
 		
 		m_spBG.setScale(videoMode.width/ m_spBG.getLocalBounds().width, videoMode.height / m_spBG.getLocalBounds().height);
 
-		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::White, Vector2f(0.08f, 0.08f));
-		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer, Color::White, Vector2f(0.08f, 0.08f));
+		LoadTextureToSprite("graphics/X.png", m_texMainPlayer, m_spMainPlayer, Color::Green, Vector2f(0.08f, 0.08f));
+		LoadTextureToSprite("graphics/O.png", m_texSecPlayer, m_spSecPlayer, Color::Red, Vector2f(0.08f, 0.08f));
 		LoadTextureToSprite("graphics/Board.png", m_texBoard, m_spBoard, Color::White, Vector2f(1.4f,1.4f));
 		
+
 		//Game Menu Setup
 		m_spBoard.setPosition(videoMode.width/3.1f, videoMode.height/3.8f);
 
@@ -51,8 +52,8 @@ void Game::Init(bool m_bForceTexture)
 			temp_yCenter / 2 + 300, "Quit");
 
 		//---------------
-		SetupFont(m_uiTurnText, m_font, 35, temp_xCenter*0.1f,
-			temp_yCenter / 2 + 300, "StateUnknown");
+		SetupFont(m_uiTurnText, m_font, 35, temp_xCenter*0.89f,
+			temp_yCenter *0.25f , "StateUnknown");
 		//=============
 		SetupFont(m_uiGameStatus, m_font, 80, temp_xCenter,
 			temp_yCenter / 2 + 100, " Game Over ! \n ");

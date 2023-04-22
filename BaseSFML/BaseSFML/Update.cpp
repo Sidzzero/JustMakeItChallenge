@@ -34,6 +34,9 @@ void Game::ChangeState(Menu a_NewMenuState)
 		m_uiStateText.setString("Main Menu");
 		m_spBG.setColor(Color::White);
 		
+		m_eMenu = Menu::MainMenu;
+		m_eState = GameState::Playing;
+		m_eGameType = GameType::PvAI;
 		break;
 	case GameMenu:
 		m_iTurnCount = 1;
@@ -41,9 +44,9 @@ void Game::ChangeState(Menu a_NewMenuState)
 		m_spBG.setColor(Color::Green);
 		m_uiTurnText.setString("CurrentTurn:"+m_iTurn);
 		m_vDrawableTextList.push_back(&m_uiTurnText);
-		m_vDrawableList.push_back(&m_spMainPlayer);
-		m_vDrawableList.push_back(&m_spSecPlayer);
-		//m_vDrawableSpriteList.push_back(&m_spBoard);
+		//m_vDrawableList.push_back(&m_spMainPlayer);
+		//m_vDrawableList.push_back(&m_spSecPlayer);
+	
 		for(int i=0;i<9;i++)
 		m_vDrawableList.push_back(&m_BoardSquare[i]);
 
@@ -61,19 +64,13 @@ void Game::ChangeGameState(GameState a_GameState)
 		break;
 	case Win:
 		m_vDrawableTextList.push_back(&m_uiGameStatus);
-		m_vDrawableTextList.push_back(&m_uiPlayAgain);
-		m_vDrawableTextList.push_back(&m_uiMainMenu);
-		m_vDrawableList.push_back(&m_BGForHide);
-		break;
-	case Lose:
-		m_vDrawableTextList.push_back(&m_uiGameStatus);
-		m_vDrawableTextList.push_back(&m_uiPlayAgain);
+	//	m_vDrawableTextList.push_back(&m_uiPlayAgain);
 		m_vDrawableTextList.push_back(&m_uiMainMenu);
 		m_vDrawableList.push_back(&m_BGForHide);
 		break;
 	case GameState::Draw:
 		m_vDrawableTextList.push_back(&m_uiGameStatus);
-		m_vDrawableTextList.push_back(&m_uiPlayAgain);
+		//m_vDrawableTextList.push_back(&m_uiPlayAgain);
 		m_vDrawableTextList.push_back(&m_uiMainMenu);
 		m_vDrawableList.push_back(&m_BGForHide);
 		break;
@@ -97,7 +94,8 @@ void Game::ChangeTurn()
 		m_vDrawableList.push_back(m_vPoolMainPlayer.back());
 		m_vPoolMainPlayer.pop_back();
 		m_iTurn = GameMove::O;
-		m_uiTurnText.setString("CurrentTurn: O's turn");
+		m_uiTurnText.setString("O's turn");
+		m_uiTurnText.setFillColor(Color::Red);
 	}
 	else if (m_iTurn == GameMove::O)
 	{
@@ -105,7 +103,8 @@ void Game::ChangeTurn()
 		m_vDrawableList.push_back(m_vPoolSecondaryPlayer.back());
 		m_vPoolSecondaryPlayer.pop_back();
 		m_iTurn = GameMove::X;
-		m_uiTurnText.setString("CurrentTurn: X's turn");
+		m_uiTurnText.setString("X's turn");
+		m_uiTurnText.setFillColor(Color::Green);
 	}
 }
 void Game::Update(RenderWindow& window)
@@ -211,6 +210,7 @@ void Game::Update(RenderWindow& window)
 					else if (m_iTurnCount >9)
 					{
 						m_uiTurnText.setString("All Turns Complete !");
+						m_uiTurnText.setFillColor(Color::White);
 						ChangeGameState(GameState::Draw);
 					}
 				}
