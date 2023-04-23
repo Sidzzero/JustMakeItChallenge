@@ -1,8 +1,6 @@
 name: Update README with branches with name "Challenge"
 on:
-  push:
-    branches:
-      - '*'
+  workflow_dispatch:
 jobs:
   update-readme:
     runs-on: ubuntu-latest
