@@ -1,0 +1,30 @@
+name: Update README with branches with name "Challenge"
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: List branches with name "Challenge"
+      run: |
+        git branch --list 'Challenge-*' > branches.txt
+        echo "- Branches with the name 'Challenge' in this repository:" > new_readme.md
+        cat branches.txt | sed 's/^/- /' >> new_readme.md
+        sed -i '/^\[Branch\]/{
+        r new_readme.md
+        d
+        }' README.md
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Update README with branches with name 'Challenge'"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
