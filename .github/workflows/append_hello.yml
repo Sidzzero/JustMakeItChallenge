@@ -9,7 +9,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.2
-
+        
+       - name: Fetch latest changes
+        run: git fetch
+        
       - name: Append "Hello" to README
         run: echo "Hello" >> README.md
 
