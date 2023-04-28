@@ -1,0 +1,21 @@
+name: Append "Hello" to README
+
+on:
+  workflow_dispatch:
+
+jobs:
+  append-to-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Append "Hello" to README
+        run: echo "Hello" >> README.md
+
+      - name: Commit changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git commit -am "Append Hello to README"
+          git push
