@@ -1,0 +1,38 @@
+THings to do-
+
+Main Screen
+1 , 2 , exits
+
+Game Screen
+win or lose  or draw screen
+
+x , 0 
+hardcoded locations to place
+
+game states
+,
+ main menu ,game ( playing , win , lose ,draw)
+game single player or ai
+
+mouse and collision
+
+2 hr
+
+
+Later
+Const, & and best things 
+
+858 break
+944
+1053 break working on collsion detection
+lol creates new text pass pointer
+
+break 1200
+i will need create collsion inside board
+
+1240 return
+1258
+frawing grid break1703 1755 breaking
+add logic to store and check and we are done
+
+2020 2hrs
