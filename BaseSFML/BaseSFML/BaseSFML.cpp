@@ -2,31 +2,29 @@
 
 #include <iostream>
 #include "SFML/Graphics.hpp"
+#include "Game.h"
 int main()
 {
-    std::cout << "Challenge Games Made using SFML\n";
-    std::cout <<"Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
-    sf::RenderWindow window(sf::VideoMode (sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
-    sf::CircleShape shape(100.0f);
-    shape.setFillColor(sf::Color::Green);
-    
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
+	sf::RenderWindow* window;
+	window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game !");
 
-        }
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+	Game* sampleGame = new Game("SampleGame");
+	
+	std::cout << "Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
+	window->setTitle(sampleGame->m_GameName);
+	while (window->isOpen())
+	{
+		while (sampleGame->Input(window))
+		{
+			//process all events inside  game!
+		}
+		sampleGame->Update(1.0f);
+		window->clear();
+		sampleGame->Render(window);
+		window->display();
+	}
 
-    
+	sampleGame->Shutdown();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
