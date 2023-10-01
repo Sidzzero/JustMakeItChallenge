@@ -20,14 +20,35 @@ int main()
     std::cout <<"Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
     sf::RenderWindow window(sf::VideoMode (sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
 
-    //Body parts
+    auto screenHeight = sf::VideoMode::getDesktopMode().height;
+    auto screenWidth = sf::VideoMode::getDesktopMode().width;
 
+    //FPS calculations...
+    sf::Font fpsFont;
+    sf::Text fpsText;
+    fpsFont.loadFromFile("Font/arial.ttf");
+    std::cout << "FontInfo:" + fpsFont.getInfo().family;
+    fpsText.setFont(fpsFont);
+    fpsText.setString("FPS:over 9000");
+    fpsText.setFillColor(sf::Color::White);
+
+    float dt;
+    sf::Clock clock;
+    std::string strFPS;
+    float dy = 0;
+
+    //Body parts
     sf::CircleShape shape(30.0f);
     shape.setFillColor(sf::Color::Green);
     std::deque<sf::CircleShape*> snakeBody;
     sf::Vector2f direction = sf::Vector2f(1.0f, 0.0f);
     eDirection dir = eDirection::Right;
-    for (int i=0;i<5;i++)
+    //Snake Number
+    std::vector<sf::Text*> snakeNumber;
+    sf::Vector2f vTextOffset;
+    vTextOffset.x = 22;
+    vTextOffset.y = 7;
+    for (int i=0;i<2;i++)
     {
         auto temp = new sf::CircleShape(30.0f);
         temp->setPosition(sf::Vector2f(400 - i*(63), 400));
@@ -35,24 +56,27 @@ int main()
         temp->setOutlineThickness(3.0f);
         temp->setFillColor(sf::Color::Green);
         snakeBody.push_back(temp) ;
+
+        auto temp_Text = new sf::Text(fpsText);
+        temp_Text->setString(std::to_string(i+1));
+        temp_Text->setPosition( temp->getPosition() + vTextOffset) ;
+        temp_Text->setFillColor(sf::Color::Blue);
+        snakeNumber.push_back(temp_Text);
     }
 
-    //FPS calculations...
-    sf::Font fpsFont;
-    sf::Text fpsText;
-    fpsFont.loadFromFile("Font/arial.ttf");
-    std::cout<<"FontInfo:"+fpsFont.getInfo().family;
-    fpsText.setFont(fpsFont);
-    fpsText.setString("FPS:over 9000");
-    fpsText.setFillColor(sf::Color::White);
-    
-    float dt;
-    sf::Clock clock;
-    std::string strFPS;
 
-    float dy = 0;
+
     float fWaitTime = 0.0f;
     float snakeUpdateTime = 0.25f;
+
+    //FOOD
+    sf::RectangleShape food;
+    food.setSize(sf::Vector2f(30,30));
+    food.setPosition(screenWidth/2,screenHeight/2);
+    food.setFillColor(sf::Color::Magenta);
+
+    
+
     while (window.isOpen())
     {
         
@@ -113,8 +137,22 @@ int main()
 
         }
         window.clear();
-      //  window.draw(shape);
+     
+        if (snakeBody.front()->getGlobalBounds().intersects(food.getGlobalBounds()) == true)
+        {
+            sf::Vector2f newFoodPostion;
+            newFoodPostion.x = rand() % (screenWidth - 80);
+            newFoodPostion.y = rand() % (screenHeight- 80);
+            food.setPosition(newFoodPostion);
+            snakeBody.push_back(new sf::CircleShape(*snakeBody.back() ) );
+            auto temp_Number = new sf::Text(*snakeNumber[0]);
+            temp_Number->setString(std::to_string(snakeBody.size()));
+            temp_Number->setPosition((snakeBody.back())->getPosition()  +vTextOffset);
+            snakeNumber.push_back(temp_Number);
+        }
+        
 
+        //Snake Update Below
         if (fWaitTime> snakeUpdateTime)
         {
             fWaitTime = 0;
@@ -149,11 +187,17 @@ int main()
           
 
         }
+        window.draw(food);
         //Draw Snake
+        int i = 0;
         for (auto it = snakeBody.cbegin(); it != snakeBody.cend(); it++)
         {
             window.draw(**it);
+            snakeNumber[i]->setPosition((*it)->getPosition() + vTextOffset);
+            window.draw(*snakeNumber[i]);
+            i++;
         }
+       
         fWaitTime+= 1.0f* dt;
         fpsText.setString("FPS:" + strFPS);
         window.draw(fpsText);
