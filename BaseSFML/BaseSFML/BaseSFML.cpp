@@ -10,8 +10,20 @@ int main()
     sf::CircleShape shape(100.0f);
     shape.setFillColor(sf::Color::Green);
     
+    sf::Font fpsFont;
+    sf::Text fpsText;
+    fpsFont.loadFromFile("Font/arial.ttf");
+    std::cout<<"FontInfo:"+fpsFont.getInfo().family;
+    fpsText.setFont(fpsFont);
+    fpsText.setString("FPS:over 9000");
+    fpsText.setFillColor(sf::Color::White);
+    
+    sf::Time dt;
+    sf::Clock clock;
+    std::string strFPS;
     while (window.isOpen())
     {
+        
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -23,7 +35,14 @@ int main()
         }
         window.clear();
         window.draw(shape);
+        dt = clock.restart();
+        strFPS = (dt.asMilliseconds());
+      //  std::cout << strFPS << std::endl;
+        fpsText.setString("FPS:" + strFPS);
+        window.draw(fpsText);
         window.display();
+    
+      
     }
 
     
