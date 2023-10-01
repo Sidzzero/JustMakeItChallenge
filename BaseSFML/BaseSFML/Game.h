@@ -1,15 +1,14 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 class Game
 {
-	enum State
-	{
-		Playing,
-		Paused,
-		GameOver
-	};
 public:
-	Game();
-private :
+	Game(sf::Window *win);
 
+private :
+	sf::Window *m_window;
+	void update();
+	void draw();
+	void handleInput();
 };
 
