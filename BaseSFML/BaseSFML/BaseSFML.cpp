@@ -9,19 +9,8 @@
 #include <algorithm>
 
 #include "Game.h"
-enum  eDirection
-{
-    Up,
-    Down,
-    Left,
-    Right
-};
-enum eGameState
-{
-    Playing,
-    Paused,
-    Menu
-};
+#include "SnakeGame.h"
+
 
 int main()
 {
@@ -29,13 +18,13 @@ int main()
     std::cout << "Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
 
-    Game* sample = new Game(&window);
-    sample->Run();
-
+    SnakeGame *snakeGame = new SnakeGame(&window);
+    snakeGame->Run();
     std::cout <<"\n Quit";
 
     return 0;
 }
+
 int _main()
 {
     std::cout << "Challenge Games Made using SFML\n";

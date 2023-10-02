@@ -13,6 +13,7 @@ protected:
 	sf::Clock clock;
 	std::string strFPS;
 
+	virtual void Init();
 	virtual void update();
 	virtual void draw();
 	virtual void handleInput(sf::Event& event);

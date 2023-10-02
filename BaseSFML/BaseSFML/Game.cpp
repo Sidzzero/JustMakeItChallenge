@@ -3,12 +3,15 @@
 
 Game::Game(sf::RenderWindow* win) : m_window{ win }, event{}, clock{}, strFPS{"FPS:"}
 {
+	Init();
+}
+void Game::Init()
+{
 	fntForDebug.loadFromFile("Font/arial.ttf");
 	txtFPS.setFont(fntForDebug);
 	txtFPS.setString("FPS:over 9000");
 	txtFPS.setFillColor(sf::Color::White);
 }
-
 void Game::Run()
 {
 	//m_window->setFramerateLimit(30);
