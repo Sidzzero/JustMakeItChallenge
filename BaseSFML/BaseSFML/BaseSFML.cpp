@@ -7,6 +7,8 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include "Game.h"
 enum  eDirection
 {
     Up,
@@ -14,7 +16,27 @@ enum  eDirection
     Left,
     Right
 };
+enum eGameState
+{
+    Playing,
+    Paused,
+    Menu
+};
+
 int main()
+{
+    std::cout << "Challenge Games Made using SFML\n";
+    std::cout << "Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
+    sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
+
+    Game* sample = new Game(&window);
+    sample->Run();
+
+    std::cout <<"\n Quit";
+
+    return 0;
+}
+int _main()
 {
     std::cout << "Challenge Games Made using SFML\n";
     std::cout <<"Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
@@ -27,7 +49,6 @@ int main()
     sf::Font fpsFont;
     sf::Text fpsText;
     fpsFont.loadFromFile("Font/arial.ttf");
-    std::cout << "FontInfo:" + fpsFont.getInfo().family;
     fpsText.setFont(fpsFont);
     fpsText.setString("FPS:over 9000");
     fpsText.setFillColor(sf::Color::White);
@@ -35,7 +56,8 @@ int main()
     float dt;
     sf::Clock clock;
     std::string strFPS;
-    float dy = 0;
+
+    eGameState gameState = eGameState::Menu;
 
     //Body parts
     sf::CircleShape shape(30.0f);
@@ -64,8 +86,6 @@ int main()
         snakeNumber.push_back(temp_Text);
     }
 
-
-
     float fWaitTime = 0.0f;
     float snakeUpdateTime = 0.25f;
 
@@ -75,6 +95,7 @@ int main()
     food.setPosition(screenWidth/2,screenHeight/2);
     food.setFillColor(sf::Color::Magenta);
 
+    //TITLE SCREEN
     
 
     while (window.isOpen())
@@ -138,6 +159,7 @@ int main()
         }
         window.clear();
      
+        //Collision Check for Food
         if (snakeBody.front()->getGlobalBounds().intersects(food.getGlobalBounds()) == true)
         {
             sf::Vector2f newFoodPostion;
@@ -183,9 +205,6 @@ int main()
             temp_Back->setOutlineColor(sf::Color::Red);
             snakeBody.push_front(temp_Back);
             
-
-          
-
         }
         window.draw(food);
         //Draw Snake
@@ -201,15 +220,14 @@ int main()
         fWaitTime+= 1.0f* dt;
         fpsText.setString("FPS:" + strFPS);
         window.draw(fpsText);
-       // shape.setPosition(sf::Vector2f(0,dy));
 
         window.display();
-    
       
     }
-
-    
+    return 0;
 }
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
