@@ -12,16 +12,21 @@ enum eGameState
 {
 	Playing,
 	Paused,
-	Menu
+	Menu,
+	GameOver
 };
 
 class SnakeGame :public Game
 {
 public:
 	SnakeGame(sf::RenderWindow* win);
+private:
+	bool CheckCollision();
 protected:
+	eGameState state;
 	//UI
 	sf::Font fntUI;
+	sf::Text txtCurrentState;
 	
 	//Snake Related
 	eDirection dir = eDirection::Right;
