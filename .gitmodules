@@ -1,3 +1,0 @@
-[submodule "sfml_imgui"]
-       path = BaseSFML/BaseSFML/sfml_imgui
-       url  = https://github.com/SFML/imgui-sfml.git
