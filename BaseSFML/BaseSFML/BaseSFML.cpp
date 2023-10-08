@@ -16,7 +16,7 @@ int main()
     std::cout << "Challenge Games Made using SFML\n";
     std::cout << "Creating Window of size:" << sf::VideoMode::getDesktopMode().width << " X " << sf::VideoMode::getDesktopMode().height;
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML powered Game ");
-
+    window.setFramerateLimit(60);
     Game *game = new Game(&window);
     game->Run();
     std::cout <<"\n Quit";
