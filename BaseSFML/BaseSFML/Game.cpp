@@ -1,46 +1,77 @@
 #include "Game.h"
+#include <iostream>
 
-Game::Game(const char* a_GameName) :m_GameName(a_GameName)
+Game::Game(sf::RenderWindow* win) : m_window{ win }, event{}, clock{}, strFPS{"FPS:"}
 {
-	std::cout << "Challenge Games Made using SFML\n";
-
-	shape = new sf::CircleShape(100.0f);
-	shape->setFillColor(sf::Color::Green);
-	std::cout << "Initiailizing Game:" + m_GameName;
+	Init();
 }
-
-bool Game::Input(sf::RenderWindow* window)
+void Game::Init()
 {
-	sf::Event event;
-	while (window->pollEvent(event))
+	fntForDebug.loadFromFile("Font/arial.ttf");
+	txtFPS.setFont(fntForDebug);
+	txtFPS.setString("FPS:over 9000");
+	txtFPS.setFillColor(sf::Color::White);
+}
+void Game::Run()
+{
+	//m_window->setFramerateLimit(30);
+	//Main Loop
+	while (m_window->isOpen())
 	{
-		if (event.type == sf::Event::Closed)
+		dt = clock.restart().asSeconds();
+
+		//Event LOOP Enter
+		while (m_window->pollEvent(event))
 		{
-			window->close();
-		}
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Escape)
+			if (event.type == sf::Event::Closed)
 			{
-			  window->close();
+				m_window->close();
+				Shutdown();
 			}
+			handleInput(event);
 		}
-		//keep window here only !
+		//Event LOOP Exit
+		update();//CHECK IF NEEDS TO BE DOWN
+		m_window->clear();
+		//Draw calls
+		draw();
+		DebugMode();
+		m_window->display();
+		
+		
 	}
-	return false;
-}
-
-void Game::Update(float dt)
-{
-
-}
-
-void Game::Render(sf::RenderWindow* window)
-{
-	window->draw(*shape);
 }
 
 void Game::Shutdown()
 {
+	Cleanup();
+}
+
+void Game::update()
+{
 
 }
+
+void Game::draw()
+{
+
+}
+
+void Game::handleInput(sf::Event& event)
+{
+
+}
+
+void Game::Cleanup()
+{
+	std::cout << "Cleanup";
+}
+
+void Game::DebugMode()
+{
+	txtFPS.setString("FPS:" + std::to_string(1.0f / dt));
+	m_window->draw(txtFPS);
+}
+
+
+

@@ -1,20 +1,30 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include <string>
-#include <iostream>
+#include <SFML/Graphics.hpp>
 class Game
 {
-private:
-	sf::CircleShape* shape;
 public:
-	std::string m_GameName;
+	Game(sf::RenderWindow*win);
+	void Run();
+protected:
+	sf::RenderWindow*m_window;
+	sf::Event event;
 
-	Game(const char* a_GameName);
+	float dt;
+	sf::Clock clock;
+	std::string strFPS;
 
-	virtual bool Input(sf::RenderWindow* window);
-	virtual void Update(float dt);
-	virtual void Render(sf::RenderWindow* window);
+	virtual void Init();
+	virtual void update();
+	virtual void draw();
+	virtual void handleInput(sf::Event& event);
+	virtual void Cleanup();
+	virtual void DebugMode();
 
-	virtual void Shutdown();
+private:
+	sf::Font fntForDebug;
+	sf::Text txtFPS;
+	void Shutdown();
+
+
 };
 
